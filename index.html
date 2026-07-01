@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple globe with iTowns</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/"
+          }
+        }
+    </script>
+</head>
+<body>
+    <div id="container">
+        <div id="viewerDiv"></div>
+        <svg id="lines"></svg>
+        <div id="labels"></div>
+    </div>
+
+    <script src="node_modules/itowns/dist/itowns.js"></script>
+    <script type="text/javascript" src="src/myMap.js"></script>
+    <script type="text/javascript" src="src/frames2D.js"></script>
+    <script type="text/javascript" src="src/raycasting.js"></script>
+    <script type="text/javascript" src="src/paths.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+html { height: 100%; }
+body { margin: 0; overflow: hidden; height: 100%; }
+#viewerDiv { margin: auto; height: 100%; width: 100%; padding: 0; }
+canvas { display: block }
+#c {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+#container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#labels {
+    position: absolute;
+    left: 0;
+    top: -100px;
+    z-index: 5;
+}
+#labels>div {
+    background-color: white;
+    width: 100PX;
+    height: 100PX;
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+    font-size: large;
+    user-select: none;
+}
+#labels>div:hover {
+    color: red;
+}
+#lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+#labels > div{
+    pointer-events: auto;
+}

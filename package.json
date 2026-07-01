@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "itowns": "^2.45.1",
+    "three": "^0.182.0"
+  }
+}

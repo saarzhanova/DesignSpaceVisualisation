@@ -1,0 +1,270 @@
+{
+  "buildings": [
+    {
+      "building_id": "A",
+      "surface_m2": 65,
+      "eviction_year": 1952,
+      "coordinates": {"x":4197089.505963267, "y":171714.65079287064, "z":4783460.763287077}
+    },
+    {
+      "building_id": "B",
+      "surface_m2": 40,
+      "eviction_year": 1953,
+      "coordinates": {"x": 4197040.875264039, "y": 171780.33230580663, "z": 4783512.594816007}
+    },
+    {
+      "building_id": "C",
+      "surface_m2": 45,
+      "eviction_year": 1952,
+      "coordinates": {"x": 4197018.225485884, "y": 171559.21926721805, "z": 4783528.21607622}
+    },
+    {
+      "building_id": "D",
+      "surface_m2": 55,
+      "eviction_year": 1953,
+      "coordinates": {"x": 4197112.928905537, "y": 171664.17625815154, "z": 4783440.866940913}
+    },
+    {
+      "building_id": "E",
+      "surface_m2": 38,
+      "eviction_year": 1952,
+      "coordinates": {"x": 4197042.654491015, "y": 171733.2259154658, "z": 4783502.387138609}
+    }
+  ],
+  "owners": [
+    {
+      "owner_id": "O1",
+      "surname": "Cage",
+      "name": "Mark",
+      "compensation_for_eviction": 950
+    },
+    {
+      "owner_id": "O2",
+      "surname": "Cage",
+      "name": "Clara",
+      "compensation_for_eviction": 800
+    },
+    {
+      "owner_id": "O3",
+      "surname": "Durand",
+      "name": "Louis",
+      "compensation_for_eviction": 820
+    },
+    {
+      "owner_id": "O4",
+      "surname": "Bernard",
+      "name": "Paul",
+      "compensation_for_eviction": 900
+    },
+    {
+      "owner_id": "O5",
+      "surname": "Moreau",
+      "name": "Elise",
+      "compensation_for_eviction": 700
+    }
+  ],
+  "tenants": [
+    {
+      "tenant_id": "T101",
+      "family_id": "F1",
+      "surname": "Martinez",
+      "name": "Jane",
+      "profession": "Laborer"
+    },
+    {
+      "tenant_id": "T102",
+      "family_id": "F1",
+      "surname": "Martinez",
+      "name": "Bob",
+      "profession": "Salesman"
+    },
+    {
+      "tenant_id": "T103",
+      "family_id": "F2",
+      "surname": "Rossi",
+      "name": "Maria",
+      "profession": "Cook"
+    },
+    {
+      "tenant_id": "T104",
+      "family_id": "F3",
+      "surname": "Petit",
+      "name": "Anne",
+      "profession": "Factory worker"
+    },
+    {
+      "tenant_id": "T105",
+      "family_id": "F4",
+      "surname": "Nguyen",
+      "name": "Minh",
+      "profession": "Tailor"
+    },
+    {
+      "tenant_id": "T106",
+      "family_id": "F4",
+      "surname": "Nguyen",
+      "name": "Lan",
+      "profession": "Seamstress"
+    },
+    {
+      "tenant_id": "T107",
+      "family_id": "F5",
+      "surname": "Leroy",
+      "name": "Paul",
+      "profession": "Carpenter"
+    },
+    {
+      "tenant_id": "T108",
+      "family_id": "F6",
+      "surname": "Garcia",
+      "name": "Luis",
+      "profession": "Worker"
+    },
+    {
+      "tenant_id": "T109",
+      "family_id": "F7",
+      "surname": "Novak",
+      "name": "Eva",
+      "profession": "Nurse"
+    },
+    {
+      "tenant_id": "T110",
+      "family_id": "F7",
+      "surname": "Novak",
+      "name": "Tomas",
+      "profession": "Child"
+    },
+    {
+      "tenant_id": "T112",
+      "family_id": "F9",
+      "surname": "Bauer",
+      "name": "Hans",
+      "profession": "Porter"
+    },
+    {
+      "tenant_id": "T113",
+      "family_id": "F10",
+      "surname": "Ali",
+      "name": "Sara",
+      "profession": "Seamstress"
+    }
+  ],
+  "ownership_contracts": [
+    {
+      "building_id": "A",
+      "owner_id": "O1",
+      "ownership_start_year": 1930,
+      "ownership_end_year": 1935
+    },
+    {
+      "building_id": "A",
+      "owner_id": "O2",
+      "ownership_start_year": 1935,
+      "ownership_end_year": 1942
+    },
+    {
+      "building_id": "A",
+      "owner_id": "O5",
+      "ownership_start_year": 1942,
+      "ownership_end_year": 1952
+    },
+    {
+      "building_id": "B",
+      "owner_id": "O3",
+      "ownership_start_year": 1932,
+      "ownership_end_year": 1940
+    },
+    {
+      "building_id": "B",
+      "owner_id": "O4",
+      "ownership_start_year": 1940,
+      "ownership_end_year": 1953
+    },
+    {
+      "building_id": "C",
+      "owner_id": "O3",
+      "ownership_start_year": 1930,
+      "ownership_end_year": 1935
+    },
+    {
+      "building_id": "C",
+      "owner_id": "O5",
+      "ownership_start_year": 1935,
+      "ownership_end_year": 1952
+    },
+    {
+      "building_id": "D",
+      "owner_id": "O1",
+      "ownership_start_year": 1934,
+      "ownership_end_year": 1954
+    }
+  ],
+  "tenancy_contracts": [
+    {
+      "main_tenant_id": "T101",
+      "owner_id": "O1",
+      "renting_start_year": 1930,
+      "renting_end_year": 1935
+    },
+    {
+      "main_tenant_id": "T103",
+      "owner_id": "O2",
+      "renting_start_year": 1935,
+      "renting_end_year": 1942
+    },
+    {
+      "main_tenant_id": "T103",
+      "owner_id": "O5",
+      "renting_start_year": 1942,
+      "renting_end_year": 1952
+    },
+    {
+      "main_tenant_id": "T104",
+      "owner_id": "O3",
+      "renting_start_year": 1932,
+      "renting_end_year": 1940
+    },
+    {
+      "main_tenant_id": "T104",
+      "owner_id": "O4",
+      "renting_start_year": 1940,
+      "renting_end_year": 1953
+    },
+    {
+      "main_tenant_id": "T105",
+      "owner_id": "O4",
+      "renting_start_year": 1940,
+      "renting_end_year": 1953
+    },
+    {
+      "main_tenant_id": "T107",
+      "owner_id": "O1",
+      "renting_start_year": 1930,
+      "renting_end_year": 1935
+    },
+    {
+      "main_tenant_id": "T108",
+      "owner_id": "O5",
+      "renting_start_year": 1935,
+      "renting_end_year": 1952
+    },
+    {
+      "main_tenant_id": "T109",
+      "owner_id": "O3",
+      "renting_start_year": 1932,
+      "renting_end_year": 1940
+    },
+    {
+      "main_tenant_id": "T112",
+      "owner_id": "O1",
+      "renting_start_year": 1930,
+      "renting_end_year": 1935
+    },
+    {
+      "main_tenant_id": "T113",
+      "owner_id": "O5",
+      "renting_start_year": 1935,
+      "renting_end_year": 1952
+    }
+  ]
+}
