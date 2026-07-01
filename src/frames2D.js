@@ -80,6 +80,49 @@ function createLabelWithSlider() {
     return el;
 }
 
+function createFrame() {
+    let el = document.createElement('div');
+    el.style.pointerEvents = 'auto'; //important
+    el.style.background = 'white';
+    el.style.padding = '8px';
+    el.style.borderRadius = '8px';
+    el.style.color = 'black';
+    el.style.width = '150px';
+
+    return el;
+}
+
+function fillFrame(actors) {
+    let el = createFrame();
+
+    let top = 40
+
+    for (let i in actors) {
+        let text = document.createElement('div');
+        text.textContent = 'Building owners: ';
+        text.style.position = 'absolute';
+        text.style.top = '10px';
+        text.style.left = '20px';
+        text.style.marginTop = '6px';
+
+        let actorID = document.createElement('div');
+        actorID.textContent = actors[i];
+        actorID.style.position = 'absolute';
+        actorID.style.top = top + 'px';
+        actorID.style.left = '20px';
+        actorID.style.marginTop = '6px';
+
+        el.appendChild(text)
+        el.appendChild(actorID)
+        top += 20;
+    }
+    labelsRoot.appendChild(el);
+
+    if (el.childNodes.length) {
+        return el;
+    }
+}
+
 
 // const frame = createLabelWithSlider();
 // const coordinates = new itowns.THREE.Vector3(
@@ -100,24 +143,23 @@ function createLabelWithSlider() {
 
 let frames = [];
 
-
 let activeFrame = null;
-const FRONT_Z = 999999;
-const HOVER_Z = 999998;
+const frontZ = 999999;
+const hoverZ = 999998;
 
 function addFrameEvents(item) {
     item.isPinned = false;
-    item.baseZIndex = 0;
+    item.startZIndex = 0;
 
     item.frame.addEventListener('mouseenter', () => {
         if (!item.isPinned) {
-            item.frame.style.zIndex = HOVER_Z;
+            item.frame.style.zIndex = hoverZ;
         }
     });
 
     item.frame.addEventListener('mouseleave', () => {
         if (!item.isPinned) {
-            item.frame.style.zIndex = item.baseZIndex;
+            item.frame.style.zIndex = item.startZIndex;
         }
     });
 
@@ -128,10 +170,10 @@ function addFrameEvents(item) {
 
         if (item.isPinned) {
             activeFrame = item;
-            item.frame.style.zIndex = FRONT_Z;
+            item.frame.style.zIndex = frontZ;
         } else {
             activeFrame = null;
-            item.frame.style.zIndex = item.baseZIndex;
+            item.frame.style.zIndex = item.startZIndex;
         }
     });
 }
@@ -154,7 +196,7 @@ fetch('dataset.json')
             console.log(buildingOwners)
 
             let frame = {
-                "frame": createLabelWithSlider(),
+                "frame": fillFrame(buildingOwners),
                 "coordinates": new itowns.THREE.Vector3(building.coordinates.x, building.coordinates.y, building.coordinates.z)
             }
 
@@ -198,10 +240,10 @@ function updateLabels() {
     // frames[i].frame.style.zIndex = ((-tempV.z * 0.5 + 0.5) * 100000) | 0;
 
     const baseZ = ((-tempV.z * 0.5 + 0.5) * 100000) | 0;
-    frames[i].baseZIndex = baseZ;
+    frames[i].startZIndex = baseZ;
 
     if (frames[i].isPinned) {
-        frames[i].frame.style.zIndex = FRONT_Z;
+        frames[i].frame.style.zIndex = frontZ;
     } else {
         frames[i].frame.style.zIndex = baseZ;
     }
