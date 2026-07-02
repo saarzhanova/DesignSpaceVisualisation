@@ -204,7 +204,10 @@ fetch('dataset.json')
             addFrameEvents(frame);
             console.log(frame);
 
-            frames.push(frame);
+            if (frame.frame) {
+                addFrameEvents(frame);
+                frames.push(frame);
+            }
         }
     })
     .catch(error => console.error('Error loading JSON:', error));
