@@ -196,6 +196,7 @@ fetch('dataset.json')
             console.log(buildingOwners)
 
             let frame = {
+                "id": buildingID,
                 "frame": fillFrame(buildingOwners),
                 "coordinates": new itowns.THREE.Vector3(building.coordinates.x, building.coordinates.y, building.coordinates.z)
             }
