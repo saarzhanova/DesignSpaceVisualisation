@@ -3,15 +3,22 @@ import { view, geometryLayer } from './myMap.js';
 
 console.log('frames in visual links:', frames);
 
-const container = document.getElementById('container');
+let svg = document.getElementById('lines');
 
-let lines = document.getElementById('lines');
+svg.appendChild(path);
+
+const container = document.getElementById('container');
+// const slider = document.getElementById('slider1');
+
+let pathes = document.getElementById('lines');
 
 function updatePath() {
     for (const frame of frames) {
         let buildingCoordinates = new THREE.Vector3(frame.coordinates.x, frame.coordinates.y, frame.coordinates.z);
         let buildingPoint = worldToScreen(buildingCoordinates, view);
         let framePoint = getFrameContainer(frame.frame, container);
+
+        console.log(frame.id, buildingPoint, framePoint);
 
         if (!buildingPoint || !framePoint) {
             frame.line.style.display = 'none';
@@ -20,12 +27,27 @@ function updatePath() {
 
         frame.line.style.display = '';
 
-        frame.line.setAttribute('x1', buildingPoint.x);
-        frame.line.setAttribute('y1', buildingPoint.y);
-        frame.line.setAttribute('x2', framePoint.x);
-        frame.line.setAttribute('y2', framePoint.y);
+        const lift = 0;     // немного подняться над зданием
+        const offsetX = 0;  // отступ перед слайдером
+        const r = 0;        // скругление
 
-        lines.appendChild(frame.line);
+        const yTop = Math.min(buildingPoint.y, framePoint.y) - lift;
+        const xMid = framePoint.x - offsetX;
+
+        const d = `
+        M ${buildingPoint.x} ${buildingPoint.y}
+        L ${buildingPoint.x} ${yTop + r}
+        Q ${buildingPoint.x} ${yTop} ${buildingPoint.x + r} ${yTop}
+        L ${xMid - r} ${yTop}
+        Q ${xMid} ${yTop} ${xMid} ${yTop + r}
+        L ${xMid} ${framePoint.y - r}
+        Q ${xMid} ${framePoint.y} ${xMid + r} ${framePoint.y}
+        L ${framePoint.x} ${framePoint.y}
+    `;
+
+        path.setAttribute('d', d);
+
+        pathes.appendChild(frame.line);
     }
 }
 
