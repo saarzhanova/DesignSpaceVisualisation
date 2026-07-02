@@ -1,3 +1,5 @@
+import { view } from './myMap.js';
+
 const THREE = itowns.THREE;
 
 const labelsRoot = document.getElementById('labels');
@@ -92,6 +94,7 @@ function createFrame() {
     return el;
 }
 
+// generate frame in another document, where I will filter what is represented on a frame
 function fillFrame(actors) {
     let el = createFrame();
 
@@ -123,7 +126,6 @@ function fillFrame(actors) {
     }
 }
 
-
 // const frame = createLabelWithSlider();
 // const coordinates = new itowns.THREE.Vector3(
 //     4200983.835123688,
@@ -153,12 +155,14 @@ function addFrameEvents(item) {
 
     item.frame.addEventListener('mouseenter', () => {
         if (!item.isPinned) {
+            item.frame.style.border = "2px solid #ec1763";
             item.frame.style.zIndex = hoverZ;
         }
     });
 
     item.frame.addEventListener('mouseleave', () => {
         if (!item.isPinned) {
+            item.frame.style.border = "none";
             item.frame.style.zIndex = item.startZIndex;
         }
     });
@@ -170,9 +174,11 @@ function addFrameEvents(item) {
 
         if (item.isPinned) {
             activeFrame = item;
+            item.frame.style.border = "2px solid #ec1763";
             item.frame.style.zIndex = frontZ;
         } else {
             activeFrame = null;
+            item.frame.style.border = "none";
             item.frame.style.zIndex = item.startZIndex;
         }
     });
@@ -207,10 +213,10 @@ fetch('dataset.json')
             let frame = {
                 "id": buildingID,
                 "frame": fillFrame(buildingOwners),
-                "coordinates": new itowns.THREE.Vector3(building.coordinates.x, building.coordinates.y, building.coordinates.z)
+                "coordinates": new itowns.THREE.Vector3(building.coordinates.x, building.coordinates.y, building.coordinates.z),
+                "line": line
             }
 
-            addFrameEvents(frame);
             console.log(frame);
 
             if (frame.frame) {
@@ -220,54 +226,53 @@ fetch('dataset.json')
         }
     })
     .catch(error => console.error('Error loading JSON:', error));
-console.log(frames);
+
 
 const tempV = new THREE.Vector3();
 
-function updateLabels() {
+function updateFrames() {
     const rect = view.domElement.getBoundingClientRect();
     const camera3D = view.camera.camera3D;
 
     for (let i = 0; i < frames.length; i++) {
-    // getting NDC
-    tempV.copy(frames[i].coordinates);
-    tempV.y = tempV.y - 50
-    tempV.z = tempV.z + 20
-    tempV.project(camera3D);
+        // getting NDC
+        tempV.copy(frames[i].coordinates);
+        tempV.y = tempV.y - 50
+        tempV.z = tempV.z + 20
+        tempV.project(camera3D);
 
-    if (tempV.z < -1 || tempV.z > 1) {
-        frames[i].frame.style.display = 'none';
-        continue;
-    }
-    frames[i].frame.style.display = '';
+        if (tempV.z < -1 || tempV.z > 1) {
+            frames[i].frame.style.display = 'none';
+            continue;
+        }
+        frames[i].frame.style.display = '';
 
-    // formula for turning NDC to pixels on the screen
-    const x = (tempV.x * 0.5 + 0.5) * rect.width;
-    const y = (tempV.y * -0.5 + 0.5) * rect.height;
+        // formula for turning NDC to pixels on the screen
+        const x = (tempV.x * 0.5 + 0.5) * rect.width;
+        const y = (tempV.y * -0.5 + 0.5) * rect.height;
 
-    frames[i].frame.style.left = `${x}px`;
-    frames[i].frame.style.top  = `${y}px`;
+        frames[i].frame.style.left = `${x}px`;
+        frames[i].frame.style.top  = `${y}px`;
 
-    // layering frames
+        // layering
+        // frames[i].frame.style.zIndex = ((-tempV.z * 0.5 + 0.5) * 100000) | 0;
+        const baseZ = ((-tempV.z * 0.5 + 0.5) * 100000) | 0;
+        frames[i].startZIndex = baseZ;
 
-    // frames[i].frame.style.zIndex = ((-tempV.z * 0.5 + 0.5) * 100000) | 0;
-
-    const baseZ = ((-tempV.z * 0.5 + 0.5) * 100000) | 0;
-    frames[i].startZIndex = baseZ;
-
-    if (frames[i].isPinned) {
-        frames[i].frame.style.zIndex = frontZ;
-    } else {
-        frames[i].frame.style.zIndex = baseZ;
-    }
+        if (frames[i].isPinned) {
+            frames[i].frame.style.zIndex = frontZ;
+        } else {
+            frames[i].frame.style.zIndex = baseZ;
+        }
     }
 }
 
-view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.AFTER_RENDER, updateLabels);
+view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.AFTER_RENDER, updateFrames);
 
 
 console.log(document.getElementById('labels'))
 
-
+console.log(frames);
+export { frames, THREE, tempV };
 
 
