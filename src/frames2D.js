@@ -195,6 +195,15 @@ fetch('dataset.json')
             }
             console.log(buildingOwners)
 
+            let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('stroke', '#ec1763');
+            line.setAttribute('stroke-width', '1');
+
+            // let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            // path.setAttribute('stroke', '#ec1763');
+            // path.setAttribute('stroke-width', '1');
+            // path.setAttribute('fill', 'none');
+
             let frame = {
                 "id": buildingID,
                 "frame": fillFrame(buildingOwners),
