@@ -1,3 +1,5 @@
+import { view, geometryLayer } from './myMap.js';
+
 const raycaster = new itowns.THREE.Raycaster();
 const mouse = new itowns.THREE.Vector2();
 

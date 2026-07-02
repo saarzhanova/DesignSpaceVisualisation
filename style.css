@@ -1,3 +1,14 @@
+/*
+
+-light blue --- #ceeaee
+-green -------- #cdd629
+-blue --------- #5568af
+-orange ------- #f37826
+-pink  -------- #ec1763
+-light pink --- #f8c9dd
+
+*/
+
 html { height: 100%; }
 body { margin: 0; overflow: hidden; height: 100%; }
 #viewerDiv { margin: auto; height: 100%; width: 100%; padding: 0; }

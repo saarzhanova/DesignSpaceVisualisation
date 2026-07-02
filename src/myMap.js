@@ -64,6 +64,7 @@ const geometryLayer = new itowns.FeatureGeometryLayer('Buildings', {
 });
 view.addLayer(geometryLayer)
 
+export { view, geometryLayer };
 
 
 
