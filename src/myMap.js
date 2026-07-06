@@ -1,3 +1,5 @@
+// get rid of sliding when scrolling the map
+
 let viewerDiv = document.getElementById('viewerDiv');
 let placement = {
     // coord: new itowns.Coordinates('EPSG:4326', 2.3522, 48.8566),
