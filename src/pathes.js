@@ -1,7 +1,7 @@
-import { frames, THREE, tempV } from './frames2D.js';
+import { attributeSpace, THREE, tempV } from './frames2D.js';
 import { view, geometryLayer } from './myMap.js';
 
-console.log('frames in visual links:', frames);
+console.log('frames in visual links:', attributeSpace);
 
 let svg = document.getElementById('lines');
 
@@ -13,7 +13,7 @@ const container = document.getElementById('container');
 let pathes = document.getElementById('lines');
 
 function updatePath() {
-    for (const frame of frames) {
+    for (const frame of attributeSpace) {
         let buildingCoordinates = new THREE.Vector3(frame.coordinates.x, frame.coordinates.y, frame.coordinates.z);
         let buildingPoint = worldToScreen(buildingCoordinates, view);
         let framePoint = getFrameContainer(frame.frame, container);

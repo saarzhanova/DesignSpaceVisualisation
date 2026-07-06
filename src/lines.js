@@ -7,7 +7,7 @@ const container = document.getElementById('container');
 
 let lines = document.getElementById('lines');
 
-function updatePath() {
+export function updatePath() {
     for (const frame of frames) {
         let buildingCoordinates = new THREE.Vector3(frame.coordinates.x, frame.coordinates.y, frame.coordinates.z);
         let buildingPoint = worldToScreen(buildingCoordinates, view);

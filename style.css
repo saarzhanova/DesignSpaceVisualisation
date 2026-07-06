@@ -44,6 +44,56 @@ canvas { display: block }
 #labels>div:hover {
     color: red;
 }
+#timeline {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 999999;
+
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#yearSlider {
+    width: 300px;
+}
+.year {
+    min-width: 60px;
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #eee;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.year:hover {
+    background: #ddd;
+}
+.year.active {
+    background: #ec1763;
+    color: white;
+}
+#timeline>div {
+    background-color: white;
+    width: 600px;
+    height: 50px;
+    position: absolute;
+    right: 0;
+    top: 100px;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: large;
+    user-select: none;
+    color: black;
+}
+
 #lines {
     position: absolute;
     inset: 0;
