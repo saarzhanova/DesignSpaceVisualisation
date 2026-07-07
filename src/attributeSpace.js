@@ -11,31 +11,47 @@ export async function loadAttributeSpace(year) {
         let building = data.buildings[i];
         let buildingID = building.building_id;
 
-        let buildingOwners = [];
+        let buildingActors = [];
 
+        for (let ownerContract of data.ownership_contracts) {
+            if (ownerContract.building_id === buildingID) {
+                let startYear = ownerContract.ownership_start_year;
+                let endYear = ownerContract.ownership_end_year;
 
-        for (let j in data.ownership_contracts) {
-            if (data.ownership_contracts[j].building_id === buildingID) {
+                let tenants = [];
 
-                let startYear = data.ownership_contracts[j].ownership_start_year;
-                let endYear = data.ownership_contracts[j].ownership_end_year;
+                for (let tenantsContract of data.tenancy_contracts) {
+                    if (tenantsContract.owner_id === ownerContract.owner_id) {
+
+                        tenants.push(tenantsContract.tenant_id);
+
+                        console.log(buildingID)
+                        console.log(tenantsContract)
+                    }
+                }
 
                 if (isBetween(year, startYear, endYear)) {
-                    buildingOwners.push(data.ownership_contracts[j].owner_id)
+                    buildingActors.push( {
+                        "owner": ownerContract.owner_id,
+                        "tenants": tenants
+                    });
                 } else if (!year) {
-                    buildingOwners.push(data.ownership_contracts[j].owner_id)
+                    buildingActors.push( {
+                        "owner": ownerContract.owner_id,
+                        "tenants": tenants
+                    });
                 }
             }
         }
 
         let buildingData = {
             "id": buildingID,
-            "owners": buildingOwners,
+            "actors": buildingActors,
             "coordinates": new itowns.THREE.Vector3(building.coordinates.x, building.coordinates.y, building.coordinates.z),
             "line": createLine()
         }
 
-        if (buildingData.owners.length) {
+        if (buildingData.actors.length) {
             attributeSpace.push(buildingData);
         }
     }

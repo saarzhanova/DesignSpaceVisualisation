@@ -14,7 +14,7 @@ export function setAttributeSpace(attributeSpace) {
     clearFrames();
 
     for (let building of attributeSpace) {
-        const frameEl = fillFrame(building.id, building.owners);
+        const frameEl = fillFrame(building.id, building.actors);
 
         if (!frameEl) continue;
 
@@ -46,12 +46,17 @@ function fillFrame(id, actors) {
 
     el.appendChild(title);
 
-    for (let i in actors) {
-        let actorID = document.createElement('div');
-        actorID.textContent = 'Owner: ' + actors[i];
-        actorID.style.fontSize = '11px';
+    for (let actor of actors) {
+        let ownerLabel = document.createElement('div');
+        ownerLabel.textContent = 'Owner: ' + actor.owner;
+        ownerLabel.style.fontSize = '11px';
+        el.appendChild(ownerLabel);
+        console.log(actor.tenants)
 
-        el.appendChild(actorID);
+        let tenantLabel = document.createElement('div');
+        tenantLabel.textContent = "Tenants: " + actor.tenants.join(', ');
+        tenantLabel.style.fontSize = '11px';
+        el.appendChild(tenantLabel);
     }
 
     labelsRoot.appendChild(el);
