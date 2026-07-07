@@ -1,4 +1,5 @@
 // get rid of sliding when scrolling the map
+// hover on buildings and highlight frames
 
 let viewerDiv = document.getElementById('viewerDiv');
 let placement = {
