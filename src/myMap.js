@@ -32,7 +32,7 @@ let view = new itowns.GlobeView(viewerDiv, placement);
 // }));
 
 const graySource = new itowns.TMSSource({
-    url: 'src/styles/white.png',
+    url: './src/styles/white.png',
     crs: 'EPSG:3857',
     format: 'image/png',
 });

@@ -1,7 +1,7 @@
 let year = 1930
 
 export async function loadAttributeSpace(year) {
-    const response = await fetch('dataset.json');
+    const response = await fetch('./dataset.json');
     const data = await response.json();
 
     console.log(data);
