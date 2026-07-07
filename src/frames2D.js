@@ -39,42 +39,29 @@ function clearFrames() {
 function fillFrame(id, actors) {
     let el = createFrame();
 
-    let top = 40
+    let title = document.createElement('div');
+    title.textContent = 'Building ' + id;
+    title.style.fontWeight = 'bold';
+    title.style.marginBottom = '6px';
+
+    el.appendChild(title);
 
     for (let i in actors) {
-        let text = document.createElement('div');
-        text.textContent = 'Building ' + id + ':';
-        text.style.position = 'absolute';
-        text.style.top = '10px';
-        text.style.left = '20px';
-        text.style.marginTop = '6px';
-
         let actorID = document.createElement('div');
-        actorID.textContent = actors[i];
-        actorID.style.position = 'absolute';
-        actorID.style.top = top + 'px';
-        actorID.style.left = '20px';
-        actorID.style.marginTop = '6px';
+        actorID.textContent = 'Owner: ' + actors[i];
+        actorID.style.fontSize = '11px';
 
-        el.appendChild(text)
-        el.appendChild(actorID)
-        top += 20;
+        el.appendChild(actorID);
     }
+
     labelsRoot.appendChild(el);
 
-    if (el.childNodes.length) {
-        return el;
-    }
+    return el;
 }
 
 function createFrame() {
     let el = document.createElement('div');
     el.style.pointerEvents = 'auto'; //important
-    el.style.background = 'white';
-    el.style.padding = '8px';
-    el.style.borderRadius = '8px';
-    el.style.color = 'black';
-    el.style.width = '150px';
     return el;
 }
 
@@ -84,7 +71,7 @@ function addFrameEvents(item) {
 
     item.frame.addEventListener('mouseenter', () => {
         if (!item.isPinned) {
-            item.frame.style.border = "2px solid #ec1763";
+            item.frame.style.border = "1px solid #ec1763";
             item.frame.style.zIndex = hoverZ;
         }
     });
@@ -103,7 +90,7 @@ function addFrameEvents(item) {
 
         if (item.isPinned) {
             activeFrame = item;
-            item.frame.style.border = "2px solid #ec1763";
+            item.frame.style.border = "1px solid #ec1763";
             item.frame.style.zIndex = frontZ;
         } else {
             activeFrame = null;

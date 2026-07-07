@@ -21,8 +21,6 @@ export async function loadAttributeSpace(year) {
                 let endYear = data.ownership_contracts[j].ownership_end_year;
 
                 if (isBetween(year, startYear, endYear)) {
-                    console.log(buildingID, data.ownership_contracts[j].building_id, year,startYear, endYear)
-                    console.log(data.ownership_contracts[j])
                     buildingOwners.push(data.ownership_contracts[j].owner_id)
                 } else if (!year) {
                     buildingOwners.push(data.ownership_contracts[j].owner_id)
@@ -49,14 +47,14 @@ function isBetween(n, start, end) {
 }
 
 function createLine() {
-    let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    // let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    // line.setAttribute('stroke', '#ec1763');
+    // line.setAttribute('stroke-width', '1');
+
+    let line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     line.setAttribute('stroke', '#ec1763');
     line.setAttribute('stroke-width', '1');
-
-    // let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    // path.setAttribute('stroke', '#ec1763');
-    // path.setAttribute('stroke-width', '1');
-    // path.setAttribute('fill', 'none');
+    line.setAttribute('fill', 'none');
 
     return line;
 }

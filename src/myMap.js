@@ -6,20 +6,40 @@ let placement = {
     // coord: new itowns.Coordinates('EPSG:4326', 2.3522, 48.8566),
     coord: new itowns.Coordinates(
         'EPSG:4978',
-        4197002.380555709, 171684.20746346193, 4783555.70678955
+        4199670.12118145, 168316.83159732557, 4781339.913502969
     ).as('EPSG:4326'),
-    range: 500,
+    range: 700,
     tilt: 25,
 };
 
 let view = new itowns.GlobeView(viewerDiv, placement);
 
-const mapStyle = new itowns.TMSSource({
-    url: 'https://a.basemaps.cartocdn.com/rastertiles/voyager_nolabels/${z}/${x}/${y}.png',
+// const mapStyle = new itowns.TMSSource({
+//     url: 'https://a.basemaps.cartocdn.com/rastertiles/voyager_nolabels/${z}/${x}/${y}.png',
+//     crs: 'EPSG:3857',
+//     format: 'image/png',
+// });
+// view.addLayer(new itowns.ColorLayer('VoyagerNoLabels', { source: mapStyle }))
+
+// const graySource = new itowns.TMSSource({
+//     url: 'src/styles/gray.png',
+//     crs: 'EPSG:3857',
+//     format: 'image/png',
+// });
+//
+// view.addLayer(new itowns.ColorLayer('GrayBackground', {
+//     source: graySource,
+// }));
+
+const graySource = new itowns.TMSSource({
+    url: 'src/styles/white.png',
     crs: 'EPSG:3857',
     format: 'image/png',
 });
-view.addLayer(new itowns.ColorLayer('VoyagerNoLabels', { source: mapStyle }))
+
+view.addLayer(new itowns.ColorLayer('GrayBackground', {
+    source: graySource,
+}));
 
 const elevationSource = new itowns.WMTSSource({
     url: 'https://data.geopf.fr/wmts?',
@@ -27,7 +47,7 @@ const elevationSource = new itowns.WMTSSource({
     name: 'ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES',
     tileMatrixSet: 'WGS84G',
     format: 'image/x-bil;bits=32',
-    zoom: { max : 19 } // remove!!
+    zoom: { max : 14 } // remove!!
 });
 const elevationLayer = new itowns.ElevationLayer('MNT_WORLD', { source: elevationSource });
 view.addLayer(elevationLayer);
@@ -66,6 +86,30 @@ const geometryLayer = new itowns.FeatureGeometryLayer('Buildings', {
     },
 });
 view.addLayer(geometryLayer)
+
+const edgeMaterial = new itowns.THREE.LineBasicMaterial({
+    color: 0xc5c5c5,
+    linewidth: 1,
+});
+
+function addBuildingOutlines() {
+    geometryLayer.object3d.traverse((obj) => {
+        if (!obj.isMesh) return;
+        if (obj.userData.hasOutline) return;
+
+        const edges = new itowns.THREE.EdgesGeometry(obj.geometry, 20);
+        const outline = new itowns.THREE.LineSegments(edges, edgeMaterial);
+
+        outline.renderOrder = 999;
+        obj.add(outline);
+
+        obj.userData.hasOutline = true;
+    });
+}
+
+view.addFrameRequester(itowns.MAIN_LOOP_EVENTS.AFTER_RENDER, () => {
+    addBuildingOutlines();
+});
 
 export { view, geometryLayer };
 

@@ -20,10 +20,20 @@ export function updatePath() {
 
         frame.line.style.display = '';
 
-        frame.line.setAttribute('x1', buildingPoint.x);
-        frame.line.setAttribute('y1', buildingPoint.y);
-        frame.line.setAttribute('x2', framePoint.x);
-        frame.line.setAttribute('y2', framePoint.y);
+        // frame.line.setAttribute('x1', buildingPoint.x);
+        // frame.line.setAttribute('y1', buildingPoint.y);
+        // frame.line.setAttribute('x2', framePoint.x);
+        // frame.line.setAttribute('y2', framePoint.y);
+
+        const cornerY = framePoint.y;
+
+        const d = `
+            M ${buildingPoint.x} ${buildingPoint.y}
+            L ${buildingPoint.x} ${cornerY}
+            L ${framePoint.x} ${framePoint.y -10}
+        `;
+
+        frame.line.setAttribute('d', d);
 
         lines.appendChild(frame.line);
     }
