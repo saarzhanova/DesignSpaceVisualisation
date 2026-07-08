@@ -14,7 +14,7 @@ export function setAttributeSpace(attributeSpace) {
     clearFrames();
 
     for (let building of attributeSpace) {
-        const frameEl = fillFrame(building.id, building.actors);
+        const frameEl = fillFrameText(building.id, building.actors);
 
         if (!frameEl) continue;
 
@@ -36,7 +36,7 @@ function clearFrames() {
     frames.length = 0;
 }
 
-function fillFrame(id, actors) {
+function fillFrameText(id, actors) {
     let el = createFrame();
 
     let title = document.createElement('div');
@@ -47,21 +47,29 @@ function fillFrame(id, actors) {
     el.appendChild(title);
 
     for (let actor of actors) {
-        let ownerLabel = document.createElement('div');
-        ownerLabel.textContent = 'Owner: ' + actor.owner;
-        ownerLabel.style.fontSize = '11px';
-        el.appendChild(ownerLabel);
-        console.log(actor.tenants)
+        if (actor.owner.length) {
+            let ownerLabel = document.createElement('div');
+            ownerLabel.textContent = 'Owner: ' + actor.owner;
+            ownerLabel.style.fontSize = '11px';
+            el.appendChild(ownerLabel);
+            console.log(actor.tenants)
+        }
 
-        let tenantLabel = document.createElement('div');
-        tenantLabel.textContent = "Tenants: " + actor.tenants.join(', ');
-        tenantLabel.style.fontSize = '11px';
-        el.appendChild(tenantLabel);
+        if (actor.tenants.length) {
+            let tenantLabel = document.createElement('div');
+            tenantLabel.textContent = "Tenants: " + actor.tenants.join(', ');
+            tenantLabel.style.fontSize = '11px';
+            el.appendChild(tenantLabel);
+        }
     }
 
     labelsRoot.appendChild(el);
 
     return el;
+}
+
+function fillFrameGraph() {
+
 }
 
 function createFrame() {

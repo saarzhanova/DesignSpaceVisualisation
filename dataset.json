@@ -203,66 +203,77 @@
     {
       "tenant_id": "T101",
       "owner_id": "O1",
+      "building_id": "A",
       "renting_start_year": 1930,
       "renting_end_year": 1935
     },
     {
       "tenant_id": "T103",
       "owner_id": "O2",
+      "building_id": "A",
       "renting_start_year": 1935,
       "renting_end_year": 1942
     },
     {
       "tenant_id": "T103",
       "owner_id": "O5",
+      "building_id": "A",
       "renting_start_year": 1942,
       "renting_end_year": 1952
     },
     {
       "tenant_id": "T104",
       "owner_id": "O3",
+      "building_id": "B",
       "renting_start_year": 1932,
       "renting_end_year": 1940
     },
     {
       "tenant_id": "T104",
       "owner_id": "O4",
+      "building_id": "B",
       "renting_start_year": 1940,
       "renting_end_year": 1953
     },
     {
       "tenant_id": "T105",
       "owner_id": "O4",
+      "building_id": "B",
       "renting_start_year": 1940,
       "renting_end_year": 1953
     },
     {
       "tenant_id": "T107",
       "owner_id": "O1",
+      "building_id": "A",
       "renting_start_year": 1930,
       "renting_end_year": 1935
     },
     {
       "tenant_id": "T108",
       "owner_id": "O5",
+      "building_id": "C",
       "renting_start_year": 1935,
       "renting_end_year": 1952
     },
     {
       "tenant_id": "T109",
       "owner_id": "O3",
+      "building_id": "B",
       "renting_start_year": 1932,
       "renting_end_year": 1940
     },
     {
       "tenant_id": "T112",
       "owner_id": "O1",
+      "building_id": "C",
       "renting_start_year": 1930,
       "renting_end_year": 1935
     },
     {
       "tenant_id": "T113",
       "owner_id": "O5",
+      "building_id": "C",
       "renting_start_year": 1935,
       "renting_end_year": 1952
     }

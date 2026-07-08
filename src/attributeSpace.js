@@ -12,30 +12,21 @@ export async function loadAttributeSpace(year) {
         let buildingID = building.building_id;
 
         let buildingActors = [];
+        let owners = [];
+        let tenants = [];
 
         for (let ownerContract of data.ownership_contracts) {
             if (ownerContract.building_id === buildingID) {
                 let startYear = ownerContract.ownership_start_year;
                 let endYear = ownerContract.ownership_end_year;
 
-                let tenants = [];
-
-                for (let tenantsContract of data.tenancy_contracts) {
-                    if (tenantsContract.owner_id === ownerContract.owner_id) {
-
-                        tenants.push(tenantsContract.tenant_id);
-
-                        console.log(buildingID)
-                        console.log(tenantsContract)
+                if (!year || isBetween(year, startYear, endYear)) {
+                    for (let tenantsContract of data.tenancy_contracts) {
+                        if (tenantsContract.owner_id === ownerContract.owner_id &&
+                            tenantsContract.building_id === buildingID) {
+                            tenants.push(tenantsContract.tenant_id)
+                        }
                     }
-                }
-
-                if (isBetween(year, startYear, endYear)) {
-                    buildingActors.push( {
-                        "owner": ownerContract.owner_id,
-                        "tenants": tenants
-                    });
-                } else if (!year) {
                     buildingActors.push( {
                         "owner": ownerContract.owner_id,
                         "tenants": tenants
