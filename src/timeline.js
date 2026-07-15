@@ -50,7 +50,7 @@ async function updateYear(year) {
     selectedYear.textContent = year;
 
     const attributeSpace = await loadAttributeSpace(year);
-    setAttributeSpace(attributeSpace);
+    setAttributeSpace(attributeSpace, year);
 
     requestAnimationFrame(() => {
         updatePath();

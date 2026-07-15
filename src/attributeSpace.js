@@ -17,21 +17,28 @@ export async function loadAttributeSpace(year) {
 
         for (let ownerContract of data.ownership_contracts) {
             if (ownerContract.building_id === buildingID) {
-                let startYear = ownerContract.ownership_start_year;
-                let endYear = ownerContract.ownership_end_year;
-
-                if (!year || isBetween(year, startYear, endYear)) {
+                // let startYear = ownerContract.ownership_start_year;
+                // let endYear = ownerContract.ownership_end_year;
+                //
+                // if (!year || isBetween(year, startYear, endYear)) {
                     for (let tenantsContract of data.tenancy_contracts) {
                         if (tenantsContract.owner_id === ownerContract.owner_id &&
                             tenantsContract.building_id === buildingID) {
-                            tenants.push(tenantsContract.tenant_id)
+                            tenants.push({
+                                "id": tenantsContract.tenant_id,
+                                "renting_start_year": tenantsContract.renting_start_year,
+                                "renting_end_year": tenantsContract.renting_end_year,
+                            })
                         }
                     }
                     buildingActors.push( {
                         "owner": ownerContract.owner_id,
-                        "tenants": tenants
+                        "ownership_start_year": ownerContract.ownership_start_year,
+                        "ownership_end_year": ownerContract.ownership_end_year,
+                        "tenants": tenants,
+
                     });
-                }
+                // }
             }
         }
 
@@ -49,9 +56,7 @@ export async function loadAttributeSpace(year) {
     return attributeSpace;
 }
 
-function isBetween(n, start, end) {
-    return (n >= start && n < end)
-}
+
 
 function createLine() {
     // let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
