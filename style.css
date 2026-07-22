@@ -173,3 +173,29 @@ canvas { display: block }
 #labels > div{
     pointer-events: auto;
 }
+
+#ownerYearDots {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    width: 420px;
+    height: 30px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.owner-year-dot {
+    position: absolute;
+    top: 50%;
+
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+
+    background: #ec1763;
+    border: 2px solid white;
+
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 6px rgba(236, 23, 99, 0.7);
+}

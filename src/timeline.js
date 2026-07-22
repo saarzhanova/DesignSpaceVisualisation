@@ -31,6 +31,48 @@ yearSlider.addEventListener('input', async () => {
     await updateYear(year);
 });
 
+let fullDataset = null;
+
+async function getFullDataset() {
+    if (!fullDataset) {
+        const response = await fetch('./dataset.json');
+        fullDataset = await response.json();
+    }
+
+    return fullDataset;
+}
+
+export async function highlightOwnerStartYears(selectedOwners) {
+    const data = await getFullDataset();
+    const ownerYearDots = document.getElementById('ownerYearDots');
+
+    ownerYearDots.innerHTML = '';
+
+    if (selectedOwners.size === 0) return;
+
+    const years = new Set();
+
+    data.ownership_contracts.forEach(contract => {
+        if (!selectedOwners.has(contract.owner_id)) return;
+
+        const year = Number(contract.ownership_start_year);
+
+        if (year >= startYear && year <= endYear) {
+            years.add(year);
+        }
+    });
+
+    years.forEach(year => {
+        const dot = document.createElement('div');
+        dot.className = 'owner-year-dot';
+
+        const percent = ((year - startYear) / (endYear - startYear)) * 100;
+        dot.style.left = `${percent}%`;
+
+        ownerYearDots.appendChild(dot);
+    });
+}
+
 function updateSelectedYearPosition() {
     const min = Number(yearSlider.min);
     const max = Number(yearSlider.max);
