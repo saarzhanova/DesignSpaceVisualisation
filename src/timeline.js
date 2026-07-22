@@ -31,19 +31,8 @@ yearSlider.addEventListener('input', async () => {
     await updateYear(year);
 });
 
-let fullDataset = null;
-
-async function getFullDataset() {
-    if (!fullDataset) {
-        const response = await fetch('./dataset.json');
-        fullDataset = await response.json();
-    }
-
-    return fullDataset;
-}
-
-export async function highlightOwnerStartYears(selectedOwners) {
-    const data = await getFullDataset();
+export async function highlightOwnerStartYears(selectedOwners, attributeSpace) {
+    console.log('timeline', attributeSpace);
     const ownerYearDots = document.getElementById('ownerYearDots');
 
     ownerYearDots.innerHTML = '';
@@ -52,15 +41,19 @@ export async function highlightOwnerStartYears(selectedOwners) {
 
     const years = new Set();
 
-    data.ownership_contracts.forEach(contract => {
-        if (!selectedOwners.has(contract.owner_id)) return;
+    attributeSpace.forEach(building => {
+        building.actors.forEach(actors => {
+            if (!selectedOwners.has(actors.owner)) return;
 
-        const year = Number(contract.ownership_start_year);
+            const year = Number(actors.ownership_start_year);
 
-        if (year >= startYear && year <= endYear) {
-            years.add(year);
-        }
-    });
+            if (year >= startYear && year <= endYear) {
+                years.add(year);
+            }
+
+        })
+
+    })
 
     years.forEach(year => {
         const dot = document.createElement('div');

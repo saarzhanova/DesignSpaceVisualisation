@@ -16,7 +16,7 @@ export function findActor(id, span, attributeSpace) {
     }
 
     checkFrameColor();
-    highlightOwnerStartYears(selectedActors);
+    void highlightOwnerStartYears(selectedActors, attributeSpace);
 }
 
 function checkFrameColor() {
