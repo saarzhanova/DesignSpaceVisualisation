@@ -9,6 +9,7 @@ const step = 5;
 const yearSlider = document.getElementById('yearSlider');
 const selectedYear = document.getElementById('selectedYear');
 const ticks = document.getElementById('ticks');
+const timeline = document.getElementById('timeline')
 
 for (let year = startYear + step; year <= endYear - step; year += step) {
     let tick = document.createElement('div');
@@ -33,26 +34,52 @@ yearSlider.addEventListener('input', async () => {
 
 export async function highlightOwnerStartYears(selectedOwners, attributeSpace) {
     console.log('timeline', attributeSpace);
-    const ownerYearDots = document.getElementById('ownerYearDots');
+    // const ownerYearDots = document.getElementById('ownerYearDots');
+    const rangesLayer = document.getElementById('ownerYearRanges');
 
-    ownerYearDots.innerHTML = '';
+    rangesLayer.innerHTML = '';
 
     if (selectedOwners.size === 0) return;
 
     const years = new Set();
 
+    let rangeIndex = 0;
+
     attributeSpace.forEach(building => {
         building.actors.forEach(actors => {
             if (!selectedOwners.has(actors.owner)) return;
 
-            const year = Number(actors.ownership_start_year);
+            let start = Number(actors.ownership_start_year);
+            let end = Number(actors.ownership_end_year);
 
-            if (year >= startYear && year <= endYear) {
-                years.add(year);
+            if (!end) {
+                end = endYear
             }
 
-        })
+            start = Math.max(start, startYear);
+            end = Math.min(end, endYear);
 
+            if (start > end) return;
+
+            console.log(start,end)
+
+            const startPercent = ((start - startYear) / (endYear - startYear)) * 100;
+            const endPercent = ((end - startYear) / (endYear - startYear)) * 100 + 2;
+
+            const range = document.createElement('div');
+            range.className = 'owner-year-range';
+
+            range.style.left = `${startPercent}%`;
+            range.style.width = `${endPercent - startPercent}%`;
+
+            range.style.bottom = `${40 + rangeIndex * 10}px`;
+            timeline.style.paddingTop = `${5 + rangeIndex * 10}px`;
+
+
+            rangesLayer.appendChild(range);
+
+            rangeIndex++;
+        })
     })
 
     years.forEach(year => {
@@ -78,7 +105,7 @@ function updateSelectedYearPosition() {
 
     const x = sliderRect.left - timelineRect.left + percent * sliderRect.width;
 
-    selectedYear.style.left = `${x}px`;
+    selectedYear.style.left = `${x + 2}px`;
 }
 
 async function updateYear(year) {

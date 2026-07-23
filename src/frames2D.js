@@ -188,17 +188,28 @@ function addFrameEvents(item) {
     });
 
     item.frame.addEventListener('click', () => {
-        item.isPinned = !item.isPinned;
-
         if (item.isPinned) {
-            activeFrame = item;
-            item.frame.style.background = hoverColor;
-            item.frame.style.zIndex = frontZ;
-        } else {
+            item.isPinned = false;
             activeFrame = null;
+
             item.frame.style.background = normalFrameBack;
             item.frame.style.zIndex = item.startZIndex;
+            return;
         }
+
+        // открепляем предыдущий активный фрейм
+        if (activeFrame && activeFrame !== item) {
+            activeFrame.isPinned = false;
+            activeFrame.frame.style.background = normalFrameBack;
+            activeFrame.frame.style.zIndex = activeFrame.startZIndex;
+        }
+
+        // закрепляем новый
+        item.isPinned = true;
+        activeFrame = item;
+
+        item.frame.style.background = hoverColor;
+        item.frame.style.zIndex = frontZ;
     });
 }
 
