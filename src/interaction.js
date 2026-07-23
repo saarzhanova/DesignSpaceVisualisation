@@ -1,6 +1,6 @@
 let selectedActors = new Set();
 let selectedSpans = new Map();
-import { highlightOwnerStartYears } from './timeline.js';
+import { highlightOwnerTimeline } from './timeline.js';
 
 export function findActor(id, span, attributeSpace) {
     if (selectedActors.has(id)) {
@@ -16,7 +16,7 @@ export function findActor(id, span, attributeSpace) {
     }
 
     checkFrameColor();
-    void highlightOwnerStartYears(selectedActors, attributeSpace);
+    void highlightOwnerTimeline(selectedActors, attributeSpace);
 }
 
 function checkFrameColor() {

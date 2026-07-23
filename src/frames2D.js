@@ -1,5 +1,6 @@
 import { view } from './myMap.js';
 import {findActor} from "./interaction.js";
+import { highlightTimelineOwners, clearTimelineOwnerHighlight } from './timeline.js';
 
 const THREE = itowns.THREE;
 
@@ -178,6 +179,12 @@ function addFrameEvents(item) {
             item.frame.style.background = hoverColor;
             item.frame.style.zIndex = hoverZ;
         }
+        const owners = item.actors
+            .filter(actor => actor.owner)
+            .map(actor => actor.owner);
+
+        console.log('item', item);
+        highlightTimelineOwners(item);
     });
 
     item.frame.addEventListener('mouseleave', () => {
@@ -185,6 +192,7 @@ function addFrameEvents(item) {
             item.frame.style.background = normalFrameBack;
             item.frame.style.zIndex = item.startZIndex;
         }
+        clearTimelineOwnerHighlight();
     });
 
     item.frame.addEventListener('click', () => {
