@@ -11,27 +11,6 @@ const selectedYear = document.getElementById('selectedYear');
 const ticks = document.getElementById('ticks');
 const timeline = document.getElementById('timeline')
 
-const ownerColors = [
-    '#ec1763',
-    '#f45b93',
-    '#d946ef',
-    '#fb7185',
-    '#c026d3',
-    '#f97316',
-    '#8b5cf6'
-];
-
-let ownerColorMap = new Map();
-
-function getOwnerColor(ownerId) {
-    if (!ownerColorMap.has(ownerId)) {
-        const index = ownerColorMap.size % ownerColors.length;
-        ownerColorMap.set(ownerId, ownerColors[index]);
-    }
-
-    return ownerColorMap.get(ownerId);
-}
-
 for (let year = startYear + step; year <= endYear - step; year += step) {
     let tick = document.createElement('div');
     tick.className = 'tick';
@@ -99,6 +78,7 @@ export async function highlightOwnerTimeline(selectedOwners, attributeSpace) {
 
         const label = document.createElement('div');
         label.className = 'owner-timeline-label';
+        label.textContent = ownerId;
         label.textContent = ownerId;
         label.style.top = `${ownerStartRow * 18}px`;
         label.style.color = color;
@@ -184,7 +164,7 @@ function updateSelectedYearPosition() {
 async function updateYear(year) {
     selectedYear.textContent = year;
 
-    const attributeSpace = await loadAttributeSpace(year);
+    const attributeSpace = await loadAttributeSpace();
     setAttributeSpace(attributeSpace, year);
 
     requestAnimationFrame(() => {

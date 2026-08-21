@@ -252,7 +252,7 @@ function updateFrames() {
         const baseZ = ((-tempV.z * 0.5 + 0.5) * 100000) | 0;
         frames[i].startZIndex = baseZ;
 
-        if (frames[i].isPinned) {
+        if (frames[i].isFramePinned) {
             frames[i].frame.style.zIndex = frontZ;
         } else {
             frames[i].frame.style.zIndex = baseZ;

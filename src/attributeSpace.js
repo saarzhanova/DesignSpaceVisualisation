@@ -1,6 +1,6 @@
 let year = 1930
 
-export async function loadAttributeSpace(year) {
+export async function loadAttributeSpace() {
     const response = await fetch('./dataset.json');
     const data = await response.json();
 
@@ -46,7 +46,7 @@ export async function loadAttributeSpace(year) {
             "id": buildingID,
             "actors": buildingActors,
             "coordinates": new itowns.THREE.Vector3(building.coordinates.x, building.coordinates.y, building.coordinates.z),
-            "line": createLine()
+            "line": createFrameLine()
         }
 
         if (buildingData.actors.length) {
@@ -58,7 +58,7 @@ export async function loadAttributeSpace(year) {
 
 
 
-function createLine() {
+function createFrameLine() {
     // let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     // line.setAttribute('stroke', '#ec1763');
     // line.setAttribute('stroke-width', '1');

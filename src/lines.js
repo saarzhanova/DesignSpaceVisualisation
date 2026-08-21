@@ -1,4 +1,5 @@
-import { frames, THREE, tempV } from './frames2D.js';
+import { frames, THREE, tempV } from './framesEmbedTime.js'; //RembST-emb
+// import { frames, THREE, tempV } from './frames2D.js'; //RembST-juxt
 import { view, geometryLayer } from './myMap.js';
 
 console.log('frames in visual links:', frames);
