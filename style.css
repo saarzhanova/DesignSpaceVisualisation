@@ -348,14 +348,14 @@ canvas { display: block }
     z-index: 3;
 }
 
-.owner-year-range {
+.owner-year-timeline {
     position: absolute;
     height: 4px; /* <--line height*/
     border-radius: 999px;
     transform: translateY(-50%);
     transition: opacity 0.2s ease, height 0.2s ease, filter 0.2s ease;
 }
-.owner-year-range.timeline-hovered {
+.owner-year-timeline.timeline-hovered {
     height: 8px;
     filter: brightness(1.3);
     z-index: 999;
@@ -375,3 +375,215 @@ canvas { display: block }
     width: 420px;
     border-top: 1px dashed rgba(0, 0, 0, 0.25);
 }
+
+
+.building-timeline-block {
+    position: relative;
+    width: 130px;
+    height: 70px;
+    margin-top: 8px;
+
+    /*scrollable*/
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    /*//*/
+}
+
+.timeline-layer {
+    position: absolute;
+    left: 0;
+    width: 100%;
+}
+
+.tenants-layer {
+    top: 0;
+    height: 40px;
+}
+
+.owners-layer {
+    top: 34px;
+    height: 30px;
+}
+
+.main-building-timeline {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 5px;
+
+    background: #f37826;
+    border-radius: 999px;
+}
+
+.owner-contract-timeline {
+    position: absolute;
+    bottom: 12px;
+
+    height: 5px;
+    border-radius: 999px;
+
+    background: #5568af;
+}
+
+.tenant-contract-timeline {
+    position: absolute;
+
+    height: 2px;
+    border: 1px solid #5568af;
+    border-radius: 999px;
+
+    background: #ceeaee;
+}
+
+/*!* чтобы tenants не лежали друг на друге *!*/
+/*.tenants-layer .tenant-contract-range:nth-child(1) {*/
+/*    top: 4px;*/
+/*}*/
+
+/*.tenants-layer .tenant-contract-range:nth-child(2) {*/
+/*    top: 14px;*/
+/*}*/
+
+/*.tenants-layer .tenant-contract-range:nth-child(3) {*/
+/*    top: 24px;*/
+/*}*/
+
+/*.range-label {*/
+/*    position: absolute;*/
+/*    left: 0;*/
+/*    top: -14px;*/
+
+/*    font-size: 10px;*/
+/*    color: black;*/
+/*    white-space: nowrap;*/
+/*}*/
+.timeline-label {
+    position: absolute;
+    top: -14px;
+
+    font-size: 10px;
+    color: black;
+    white-space: nowrap;
+}
+
+.timeline-label.label-center {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.timeline-label.label-right {
+    left: 50%;
+    transform: translateX(calc(-50% + 4px));
+}
+
+.timeline-label.label-left {
+    left: 50%;
+    transform: translateX(calc(-50% - 4px));
+}
+
+.timeline-label.label-up {
+    left: 50%;
+    transform: translateX(-50%);
+}
+ .timeline-dot-label {
+     position: absolute;
+     left: 50%;
+     top: -14px;
+     transform: translateX(-50%);
+
+     font-size: 14px;
+     line-height: 1;
+     color: black;
+     cursor: pointer;
+ }
+.timeline-dot-label:hover::after {
+    content: attr(title);
+
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+
+    background: white;
+    color: black;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 99999999999999;
+}
+/*scrollable*/
+.timeline-window-slider {
+    position: absolute;
+    left: 0;
+    bottom: -22px;
+
+    width: 100%;
+    height: 12px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+
+    pointer-events: auto;
+    z-index: 999999;
+}
+
+.timeline-window-slider::-webkit-slider-runnable-track {
+    height: 3px;
+    background: #f37826;
+    border-radius: 999px;
+}
+
+.timeline-window-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+    background: #111;
+    border: 3px solid #f37826;
+
+    margin-top: -3.5px;
+    cursor: pointer;
+}
+.timeline-ticks-layer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 22px;
+
+    pointer-events: none;
+}
+
+.timeline-tick {
+    position: absolute;
+    bottom: 0;
+
+    width: 1px;
+    height: 8px;
+
+    background: #f37826;
+}
+
+.timeline-tick-label {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    font-size: 8px;
+    color: black;
+    white-space: nowrap;
+}
+/*//*/

@@ -13,7 +13,6 @@ export async function loadAttributeSpace() {
 
         let buildingActors = [];
         let owners = [];
-        let tenants = [];
 
         for (let ownerContract of data.ownership_contracts) {
             if (ownerContract.building_id === buildingID) {
@@ -21,23 +20,23 @@ export async function loadAttributeSpace() {
                 // let endYear = ownerContract.ownership_end_year;
                 //
                 // if (!year || isBetween(year, startYear, endYear)) {
-                    for (let tenantsContract of data.tenancy_contracts) {
-                        if (tenantsContract.owner_id === ownerContract.owner_id &&
-                            tenantsContract.building_id === buildingID) {
-                            tenants.push({
-                                "id": tenantsContract.tenant_id,
-                                "renting_start_year": tenantsContract.renting_start_year,
-                                "renting_end_year": tenantsContract.renting_end_year,
-                            })
-                        }
+                let tenants = [];
+                for (let tenantsContract of data.tenancy_contracts) {
+                    if (tenantsContract.owner_id === ownerContract.owner_id &&
+                        tenantsContract.building_id === buildingID) {
+                        tenants.push({
+                            "id": tenantsContract.tenant_id,
+                            "renting_start_year": tenantsContract.renting_start_year,
+                            "renting_end_year": tenantsContract.renting_end_year,
+                        })
                     }
-                    buildingActors.push( {
-                        "owner": ownerContract.owner_id,
-                        "ownership_start_year": ownerContract.ownership_start_year,
-                        "ownership_end_year": ownerContract.ownership_end_year,
-                        "tenants": tenants,
-
-                    });
+                }
+                buildingActors.push( {
+                    "owner": ownerContract.owner_id,
+                    "ownership_start_year": ownerContract.ownership_start_year,
+                    "ownership_end_year": ownerContract.ownership_end_year,
+                    "tenants": tenants,
+                });
                 // }
             }
         }

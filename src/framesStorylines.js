@@ -1,122 +1,32 @@
 import { view } from './myMap.js';
-import {findActor} from "./interaction.js";
-import { attachTimeline } from './embeddedTimeline.js';
-
 
 const THREE = itowns.THREE;
 const tempV = new THREE.Vector3();
-
 const labelsRoot = document.getElementById('labels');
 
+const fullStartYear = 1920;
+const fullEndYear = 1960;
+const visibleYears = 8;
+let frames = [];
 export let activeBuilding = null;
 let pinnedBuilding = null;
 const frontZ = 999999;
 const hoverZ = 999998;
-
-let frames = [];
-
 let hoverColor = '#f995b2';
 let normalFrameBack = '#f8c9dd'
 
 export function setAttributeSpace(attributeSpace, year) {
     console.log(year, attributeSpace);
-    clearFrames();
 
     for (let building of attributeSpace) {
         let frameEl = fillFrameText(building, 1935, attributeSpace);
-
         if (!frameEl) continue;
-
         building.frame = frameEl;
-        attachTimeline(building);
         addFrameEvents(building);
         frames.push(building);
     }
-
     updateFramesPosition();
-
     console.log('frames:', frames);
-}
-
-function isBetween(n, start, end) {
-    return (n >= start && n < end)
-}
-
-function clearFrames() {
-    for (const frame of frames) {
-        if (frame.frame) frame.frame.remove();
-        if (frame.line) frame.line.remove();
-    }
-    frames.length = 0;
-}
-
-export function updateFrameByYear(building, year, attributeSpace) {
-    let buildingId = building.id;
-    let newBuilding;
-    let frame = building.frame;
-    let previousOwner = frame.getElementsByClassName('owner')[0].textContent
-    let tenantsLabel = frame.getElementsByClassName('tenants')[0]
-
-    let newOwner = null;
-    console.log(building)
-    let tenantsList;
-    building.actors.forEach(actors => {
-        let startYearOwner = actors.ownership_start_year;
-        let endYearOwner = actors.ownership_end_year;
-        if (isBetween(year, startYearOwner, endYearOwner)) {
-            newOwner = actors.owner;
-        }
-        tenantsList = [];
-        actors.tenants.forEach(tenant => {
-            let startYearTenants = tenant.renting_start_year;
-            let endYearTenants = tenant.renting_end_year;
-            if (isBetween(year, startYearTenants, endYearTenants)) {
-                console.log(tenant.id)
-                tenantsList.push(tenant);
-            }
-        })
-    });
-
-    if (newOwner) {
-        frame.getElementsByClassName('owner')[0].textContent = newOwner;
-    } else {
-        frame.getElementsByClassName('owner')[0].textContent = '-';
-    }
-
-    if (newOwner && tenantsLabel && tenantsList.length) {
-        frame.getElementsByClassName('tenants')[0].style.display = 'block';
-        frame.getElementsByClassName('tenants-names')[0].replaceChildren();
-        tenantsList.forEach((tenant, index) => {
-            let tenantSpan = document.createElement('span');
-            tenantSpan.classList.add('tenants');
-            tenantSpan.id = tenant.id;
-            tenantSpan.textContent = tenant.id;
-            tenantSpan.style.transition = 'color 0.2s ease';
-
-            tenantSpan.addEventListener('mouseenter', () => {
-                tenantSpan.style.color = '#ec1763';
-            });
-
-            tenantSpan.addEventListener('mouseleave', () => {
-                tenantSpan.style.color = 'black';
-            });
-
-            tenantSpan.addEventListener('click', () => {
-                console.log('clicked ' + tenant);
-                findActor(tenant.id, tenantSpan, attributeSpace);
-            });
-
-            frame.getElementsByClassName('tenants-names')[0].appendChild(tenantSpan);
-
-            if (index < tenantsList.length - 1) {
-                frame.getElementsByClassName('tenants-names')[0].appendChild(document.createTextNode(', '));
-            }
-        });
-    } else if (tenantsLabel) {
-        frame.getElementsByClassName('tenants')[0].style.display = 'none';
-    } else if (tenantsLabel && !tenantsList) {
-        frame.getElementsByClassName('tenants')[0].style.display = 'none';
-    }
 }
 
 function fillFrameText(building, year, attributeSpace) {
@@ -129,98 +39,365 @@ function fillFrameText(building, year, attributeSpace) {
     title.textContent = 'Building ' + id;
     title.style.fontWeight = 'bold';
     title.style.marginBottom = '6px';
-
     el.appendChild(title);
 
-    // for (let actor of actors) {
-    if (actors.owner.length) {
-        let ownerLabel = document.createElement('div');
-        ownerLabel.style.fontSize = '11px';
-
-        let prefix = document.createElement('span');
-        prefix.textContent = 'Owner: ';
-        ownerLabel.appendChild(prefix);
-
-        let ownerSpan = document.createElement('span');
-        ownerSpan.id = actors.owner;
-        ownerSpan.classList.add('owner');
-        console.log(el)
-        ownerSpan.textContent = actors.owner;
-        ownerSpan.style.cursor = 'pointer';
-        ownerSpan.style.transition = 'color 0.2s ease';
-
-        ownerSpan.addEventListener('mouseenter', () => {
-            ownerSpan.style.color = '#ec1763';
-        });
-
-        ownerSpan.addEventListener('mouseleave', () => {
-            ownerSpan.style.color = 'black';
-        });
-
-        ownerSpan.addEventListener('click', () => {
-            console.log('clicked ' + actors.owner);
-            findActor(actors.owner, ownerSpan, attributeSpace);
-        });
-
-        ownerLabel.appendChild(ownerSpan);
-        el.appendChild(ownerLabel);
-    }
-
-    let visibleTenants = actors.tenants.filter((tenant) => {
-        let startYear = tenant.renting_start_year;
-        let endYear = tenant.renting_end_year;
-
-        return !year || isBetween(year, startYear, endYear);
-    });
-
-    if (visibleTenants.length) {
-        let tenantLabel = document.createElement('div');
-        tenantLabel.classList.add('tenants');
-        tenantLabel.style.fontSize = '11px';
-
-        let prefix = document.createElement('span');
-        prefix.textContent = 'Tenants: ';
-        tenantLabel.appendChild(prefix);
-
-        let tenantsContainer = document.createElement('span');
-        tenantsContainer.className = 'tenants-names';
-
-
-        visibleTenants.forEach((tenant, index) => {
-            let tenantSpan = document.createElement('span');
-            tenantSpan.classList.add('tenants');
-            tenantSpan.id = tenant.id;
-            tenantSpan.textContent = tenant.id;
-            tenantSpan.style.transition = 'color 0.2s ease';
-
-            tenantSpan.addEventListener('mouseenter', () => {
-                tenantSpan.style.color = '#ec1763';
-            });
-
-            tenantSpan.addEventListener('mouseleave', () => {
-                tenantSpan.style.color = 'black';
-            });
-
-            tenantSpan.addEventListener('click', () => {
-                console.log('clicked ' + tenant);
-                findActor(tenant.id, tenantSpan, attributeSpace);
-            });
-
-            tenantsContainer.appendChild(tenantSpan);
-
-            if (index < visibleTenants.length - 1) {
-                tenantsContainer.appendChild(document.createTextNode(', '));
-            }
-        });
-        tenantLabel.appendChild(tenantsContainer);
-
-        el.appendChild(tenantLabel);
-    }
-    // }
+    const timelineBlock = createTimelineBlock(building);
+    el.appendChild(timelineBlock);
 
     labelsRoot.appendChild(el);
 
     return el;
+}
+
+function createTimelineBlock(building) {
+    if (building.visibleStartYear === undefined) {
+        building.visibleStartYear = 1930;
+    }
+    const timelineBlock = document.createElement('div');
+    timelineBlock.className = 'building-timeline-block';
+
+    const tenantsLayer = document.createElement('div');
+    tenantsLayer.className = 'timeline-layer tenants-layer';
+
+    const ownersLayer = document.createElement('div');
+    ownersLayer.className = 'timeline-layer owners-layer';
+
+    const mainLine = document.createElement('div');
+    mainLine.className = 'main-building-timeline';
+
+    const ticksLayer = document.createElement('div');
+    ticksLayer.className = 'timeline-ticks-layer';
+
+    timelineBlock.appendChild(ticksLayer);
+    timelineBlock.appendChild(tenantsLayer);
+    timelineBlock.appendChild(ownersLayer);
+    timelineBlock.appendChild(mainLine);
+    timelineBlock.dataset.visibleStartYear = building.visibleStartYear;
+
+    drawTimelines(building, timelineBlock, tenantsLayer, ownersLayer);
+
+    mergeNeighbourTenantTimelines(timelineBlock);
+    fixOverlayingLabels(timelineBlock);
+    addTimelineScrollEvents(timelineBlock, building);
+
+    return timelineBlock;
+}
+
+function mergeNeighbourTenantTimelines(frame) {
+    let timelines = [...frame.querySelectorAll('.tenant-contract-timeline')];
+
+    let changed = true;
+
+    while (changed) {
+        changed = false;
+
+        timelines = [...frame.querySelectorAll('.tenant-contract-timeline')];
+
+        for (let i = 0; i < timelines.length; i++) {
+            const current = timelines[i];
+
+            const match = timelines.find(next => {
+                if (next === current) return false;
+
+                const sameTenant = current.dataset.actorId === next.dataset.actorId;
+                const touching = Number(current.dataset.end) === Number(next.dataset.start);
+
+                return sameTenant && touching;
+            });
+
+            if (!match) continue;
+
+            const newEnd = Number(match.dataset.end);
+
+            current.dataset.end = newEnd;
+
+            const visibleStartYear = Number(current.closest('.building-timeline-block').dataset.visibleStartYear);
+
+            const startPercent = yearToPercent(Number(current.dataset.start), visibleStartYear);
+            const endPercent = yearToPercent(newEnd, visibleStartYear);
+
+            current.style.left = `${startPercent}%`;
+            current.style.width = `${endPercent - startPercent}%`;
+
+            match.remove();
+
+            changed = true;
+            break;
+        }
+    }
+}
+
+function yearToPercent(year, visibleStartYear) {
+    const visibleEndYear = visibleStartYear + visibleYears;
+    return ((year - visibleStartYear) / (visibleEndYear - visibleStartYear)) * 100;
+}
+
+function fixOverlayingLabels(timelineBlock) {
+    requestAnimationFrame(() => {
+        const timelines = [...timelineBlock.querySelectorAll('.tenant-contract-timeline, .owner-contract-timeline')];
+
+        timelines.forEach(timeline => {
+            const label = timeline.querySelector('.timeline-label');
+            if (!label) return;
+
+            label.classList.remove('label-left', 'label-right', 'label-up');
+            label.style.top = '';
+            label.style.left = '';
+        });
+
+        timelines.forEach(timeline => {
+            const label = timeline.querySelector('.timeline-label');
+            if (!label) return;
+
+            const timelineWidth = timeline.offsetWidth;
+            const labelWidth = label.scrollWidth;
+            const start = Number(timeline.dataset.start);
+            const end = Number(timeline.dataset.end);
+
+            if (labelWidth <= timelineWidth) {
+                label.classList.add('label-center');
+                return;
+            }
+
+            const hasLeftNeighbour = timelines.some(other => {
+                if (other === timeline) return false;
+                return Number(other.dataset.end) === start;
+            });
+
+            const hasRightNeighbour = timelines.some(other => {
+                if (other === timeline) return false;
+                return Number(other.dataset.start) === end;
+            });
+
+            if (!hasRightNeighbour) {
+                label.classList.add('label-right');
+            } else if (!hasLeftNeighbour) {
+                label.classList.add('label-left');
+            } else {
+                label.classList.add('label-up');
+
+                const upLevel = getFreeLabelLevel(timeline, timelines);
+                label.style.top = `${-14 - upLevel * 14}px`;
+
+                const layer = timeline.closest('.timeline-layer');
+                if (layer) {
+                    const currentHeight = layer.offsetHeight;
+                    const neededHeight = currentHeight + upLevel * 14;
+                    layer.style.height = `${neededHeight}px`;
+                }
+            }
+        });
+    });
+}
+
+function addTimelineScrollEvents(timelinesBlock, building) {
+    let isDragging = false;
+    let startX = 0;
+    let startVisibleYear = 0;
+
+    timelinesBlock.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+            ? event.deltaX
+            : event.deltaY;
+
+        building.visibleStartYear += delta * 0.03; //scrolling speed
+        clampVisibleYear(building);
+
+        redrawBuildingTimelineContent(building);
+    }, { passive: false });
+
+    timelinesBlock.addEventListener('pointerdown', (event) => {
+        event.stopPropagation();
+
+        isDragging = true;
+        startX = event.clientX;
+        startVisibleYear = building.visibleStartYear;
+
+        timelinesBlock.setPointerCapture(event.pointerId);
+        timelinesBlock.style.cursor = 'grabbing';
+    });
+
+    timelinesBlock.addEventListener('pointermove', (event) => {
+        if (!isDragging) return;
+        event.stopPropagation();
+
+        const dx = event.clientX - startX;
+        building.visibleStartYear = startVisibleYear - dx * 0.2; // dragging speed
+
+        clampVisibleYear(building);
+        redrawBuildingTimelineContent(building);
+    });
+
+    timelinesBlock.addEventListener('pointerup', (event) => {
+        isDragging = false;
+        timelinesBlock.releasePointerCapture(event.pointerId);
+        timelinesBlock.style.cursor = 'grab';
+    });
+
+    timelinesBlock.addEventListener('pointercancel', () => {
+        isDragging = false;
+        timelinesBlock.style.cursor = 'grab';
+    });
+
+    timelinesBlock.style.cursor = 'grab';
+}
+
+function clampVisibleYear(building) {
+    const min = fullStartYear;
+    const max = fullEndYear - visibleYears;
+
+    building.visibleStartYear = Math.max(min, Math.min(max, building.visibleStartYear));
+}
+
+function redrawBuildingTimelineContent(building) {
+    const block = building.frame.querySelector('.building-timeline-block');
+    if (!block) return;
+    block.dataset.visibleStartYear = building.visibleStartYear;
+
+    const tenantsLayer = block.querySelector('.tenants-layer');
+    const ownersLayer = block.querySelector('.owners-layer');
+
+    tenantsLayer.replaceChildren();
+    ownersLayer.replaceChildren();
+
+    drawTimelines(building, block, tenantsLayer, ownersLayer);
+    mergeNeighbourTenantTimelines(block);
+    fixOverlayingLabels(block);
+}
+
+function drawTimelines(building, block, tenantsLayer, ownersLayer) {
+    let maxTenantLevel = -1;
+    const ticksLayer = block.querySelector('.timeline-ticks-layer');
+    if (ticksLayer) {
+        drawTimelineTicks(building, ticksLayer);
+    }
+
+    building.actors.forEach(actor => {
+        const ownerTimeline = createTimeline(
+            building,
+            actor.ownership_start_year,
+            actor.ownership_end_year,
+            actor.owner,
+            'owner-contract-timeline'
+        );
+
+        if (ownerTimeline) {
+            ownersLayer.appendChild(ownerTimeline);
+        }
+
+        actor.tenants.forEach((tenant, index) => {
+            const tenantTimeline = createTimeline(
+                building,
+                tenant.renting_start_year,
+                tenant.renting_end_year,
+                tenant.id,
+                'tenant-contract-timeline'
+            );
+
+            if (tenantTimeline) {
+                tenantTimeline.style.bottom = `${10 + index * 17}px`;
+                tenantsLayer.appendChild(tenantTimeline);
+                maxTenantLevel = Math.max(maxTenantLevel, index);
+            }
+        });
+    });
+
+    const hasTenants = maxTenantLevel >= 0;
+    const tenantsHeight = hasTenants ? (20 + (maxTenantLevel + 1) * 17) : 0;
+
+    const ownersHeight = 20;
+    const mainHeight = 18;
+
+    tenantsLayer.style.height = `${tenantsHeight}px`;
+    ownersLayer.style.top = `${tenantsHeight}px`;
+    block.style.height = `${tenantsHeight + ownersHeight + mainHeight}px`;
+}
+
+function drawTimelineTicks(building, ticksLayer) {
+    ticksLayer.replaceChildren();
+
+    const visibleStart = building.visibleStartYear;
+    const visibleEnd = visibleStart + visibleYears;
+
+    const firstYear = Math.ceil(visibleStart);
+    const lastYear = Math.floor(visibleEnd);
+
+    for (let year = firstYear; year <= lastYear; year++) {
+        const tick = document.createElement('div');
+        tick.className = 'timeline-tick';
+
+        if (year % 5 === 0) {
+            tick.classList.add('major-tick');
+
+            const label = document.createElement('div');
+            label.className = 'timeline-tick-label';
+            label.textContent = year;
+
+            tick.appendChild(label);
+        }
+
+        const percent = yearToPercent(year, visibleStart);
+        tick.style.left = `${percent}%`;
+
+        ticksLayer.appendChild(tick);
+    }
+}
+
+function createTimeline(building, start, end, labelText, className) {
+    const visibleStartYear = building.visibleStartYear;
+    const visibleEndYear = visibleStartYear + visibleYears;
+
+    start = Math.max(Number(start), visibleStartYear);
+    end = Math.min(Number(end), visibleEndYear);
+
+    if (start >= end) {
+        return null;
+    }
+
+    const timeline = document.createElement('div');
+    timeline.className = className;
+    timeline.dataset.actorId = labelText;
+    timeline.title = labelText;
+    timeline.dataset.actorId = labelText;
+    timeline.dataset.start = start;
+    timeline.dataset.end = end;
+
+    const startPercent = yearToPercent(start, visibleStartYear);
+    const endPercent = yearToPercent(end, visibleStartYear);
+
+    timeline.style.left = `${startPercent}%`;
+    timeline.style.width = `${endPercent - startPercent}%`;
+
+    const label = document.createElement('span');
+    label.className = 'timeline-label';
+    label.title = labelText;
+    label.textContent = labelText;
+
+    timeline.appendChild(label);
+
+    return timeline;
+}
+
+function getFreeLabelLevel(timeline, timelines) {
+    const start = Number(timeline.dataset.start);
+    const end = Number(timeline.dataset.end);
+
+    let level = 0;
+
+    const busyLevels = timelines
+        .filter(other => other !== timeline)
+        .map(other => Number(other.dataset.labelLevel || 0));
+
+    while (busyLevels.includes(level)) {
+        level++;
+    }
+
+    timeline.dataset.labelLevel = level;
+
+    return level;
 }
 
 function addActorsToClass(attributeSpace, id, el) {
@@ -256,7 +433,9 @@ function addFrameEvents(building) {
         if (!building.isFramePinned) {
             building.frame.style.background = hoverColor;
             building.frame.style.zIndex = hoverZ;
-            timeline.style.setProperty('--slider-color', timelineColourSelected);
+            if (timeline) {
+                timeline.style.setProperty('--slider-color', timelineColourSelected);
+            }
         }
         console.log('frame hovered', building);
     });
@@ -265,8 +444,9 @@ function addFrameEvents(building) {
         if (!building.isFramePinned) {
             building.frame.style.background = normalFrameBack;
             building.frame.style.zIndex = building.startZIndex;
-
-            timeline.style.setProperty('--slider-color', timelineColourNormal);
+            if (timeline) {
+                timeline.style.setProperty('--slider-color', timelineColourNormal);
+            }
         }
     });
 
@@ -288,7 +468,9 @@ function addFrameEvents(building) {
             pinnedBuilding.isPinned = false;
             pinnedBuilding.frame.style.background = normalFrameBack;
             pinnedBuilding.frame.style.zIndex = pinnedBuilding.startZIndex;
+            if (timeline) {
             timeline.style.setProperty('--slider-color', timelineColourNormal);
+            }
 
         }
 
@@ -298,7 +480,9 @@ function addFrameEvents(building) {
 
         building.frame.style.background = hoverColor;
         building.frame.style.zIndex = frontZ;
+        if (timeline) {
         timeline.style.setProperty('--slider-color', timelineColourSelected);
+        }
 
     });
 }
