@@ -44,7 +44,7 @@ import './embStorylines/framesStorylines.js';
 
 import './raycasting.js';
 
-import './lines.js';
+import './embStorylines/lines.js';
 
 // highlights users
 import './embStorylines/interaction.js'; // highlightOwnerTimeline <---------

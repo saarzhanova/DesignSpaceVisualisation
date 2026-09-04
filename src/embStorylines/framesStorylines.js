@@ -1,4 +1,4 @@
-import { view } from './myMap.js';
+import { view } from '../myMap.js';
 
 const THREE = itowns.THREE;
 const tempV = new THREE.Vector3();

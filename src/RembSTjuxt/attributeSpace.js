@@ -1,0 +1,122 @@
+let year = 1930
+
+export async function loadAttributeSpace(year) {
+    const response = await fetch('./dataset.json');
+    const data = await response.json();
+
+    console.log(data);
+    let attributeSpace = [];
+
+    for (let i in data.buildings) {
+        let building = data.buildings[i];
+        let buildingID = building.building_id;
+
+        let buildingActors = [];
+        let owners = [];
+        let tenants = [];
+
+        for (let ownerContract of data.ownership_contracts) {
+            if (ownerContract.building_id === buildingID) {
+                // let startYear = ownerContract.ownership_start_year;
+                // let endYear = ownerContract.ownership_end_year;
+                //
+                // if (!year || isBetween(year, startYear, endYear)) {
+                for (let tenantsContract of data.tenancy_contracts) {
+                    if (tenantsContract.owner_id === ownerContract.owner_id &&
+                        tenantsContract.building_id === buildingID) {
+                        tenants.push({
+                            "id": tenantsContract.tenant_id,
+                            "renting_start_year": tenantsContract.renting_start_year,
+                            "renting_end_year": tenantsContract.renting_end_year,
+                        })
+                    }
+                }
+                buildingActors.push( {
+                    "owner": ownerContract.owner_id,
+                    "ownership_start_year": ownerContract.ownership_start_year,
+                    "ownership_end_year": ownerContract.ownership_end_year,
+                    "tenants": tenants,
+
+                });
+                // }
+            }
+        }
+
+        let buildingData = {
+            "id": buildingID,
+            "actors": buildingActors,
+            "coordinates": new itowns.THREE.Vector3(building.coordinates.x, building.coordinates.y, building.coordinates.z),
+            "line": createLine()
+        }
+
+        if (buildingData.actors.length) {
+            attributeSpace.push(buildingData);
+        }
+    }
+    return attributeSpace;
+}
+
+
+
+function createLine() {
+    // let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    // line.setAttribute('stroke', '#ec1763');
+    // line.setAttribute('stroke-width', '1');
+
+    let line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    line.setAttribute('stroke', '#ec1763');
+    line.setAttribute('stroke-width', '1');
+    line.setAttribute('fill', 'none');
+
+    return line;
+}
+
+
+
+
+
+
+
+// fetch('dataset.json')
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data);
+//         for (let i in data.buildings) {
+//             let building = data.buildings[i];
+//             let buildingID = building.building_id;
+//             console.log(buildingID);
+//
+//             let buildingOwners = [];
+//             for (let j in data.ownership_contracts) {
+//                 if (data.ownership_contracts[j].building_id === buildingID) {
+//                     buildingOwners.push(data.ownership_contracts[j].owner_id)
+//                 }
+//             }
+//             console.log(buildingOwners)
+//
+//             let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+//             line.setAttribute('stroke', '#ec1763');
+//             line.setAttribute('stroke-width', '1');
+//
+//             // let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+//             // path.setAttribute('stroke', '#ec1763');
+//             // path.setAttribute('stroke-width', '1');
+//             // path.setAttribute('fill', 'none');
+//
+//             let frame = {
+//                 "id": buildingID,
+//                 "frame": fillFrame(buildingOwners),
+//                 "coordinates": new itowns.THREE.Vector3(building.coordinates.x, building.coordinates.y, building.coordinates.z),
+//                 "line": line
+//             }
+//
+//             console.log(frame);
+//
+//             if (frame.frame) {
+//                 addFrameEvents(frame);
+//                 frames.push(frame);
+//             }
+//         }
+//     })
+//     .catch(error => console.error('Error loading JSON:', error));
+

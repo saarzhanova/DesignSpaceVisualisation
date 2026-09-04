@@ -164,7 +164,7 @@ function updateSelectedYearPosition() {
 async function updateYear(year) {
     selectedYear.textContent = year;
 
-    const attributeSpace = await loadAttributeSpace();
+    const attributeSpace = await loadAttributeSpace(year);
     setAttributeSpace(attributeSpace, year);
 
     requestAnimationFrame(() => {

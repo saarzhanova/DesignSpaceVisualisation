@@ -1,7 +1,6 @@
 let selectedActors = new Set();
 let selectedSpans = new Map();
-// import { highlightOwnerTimeline } from './timeline.js';  //RembST-juxt
-// import {  } from './embeddedTimeline.js'; //RembST-emb
+import { highlightOwnerTimeline } from './timeline.js';
 
 export function findActor(id, span, attributeSpace) {
     console.log('findActor ' + id);
@@ -18,7 +17,7 @@ export function findActor(id, span, attributeSpace) {
     }
 
     checkFrameColor();
-    // void highlightOwnerTimeline(selectedActors, attributeSpace); //RembST-juxt
+    void highlightOwnerTimeline(selectedActors, attributeSpace);
 }
 
 function checkFrameColor() {

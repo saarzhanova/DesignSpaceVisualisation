@@ -1,4 +1,4 @@
-import { view } from './myMap.js';
+import { view } from '../myMap.js';
 import {findActor} from "./interaction.js";
 import { highlightTimelineOwners, clearTimelineOwnerHighlight } from './timeline.js';
 
